@@ -1,0 +1,81 @@
+import cv2
+import time
+
+def main():
+  
+    # 利用可能なデバイスを格納するリスト
+    devices = []
+    
+    # 利用可能なデバイスを捜索
+    for i in range(10):  
+        cap = cv2.VideoCapture(i)
+
+        # デバイスが存在し、開かれた場合
+        if cap.isOpened():
+           
+            width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
+            height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+            fps = cap.get(cv2.CAP_PROP_FPS)
+            autofocus = cap.get(cv2.CAP_PROP_AUTOFOCUS)
+            focus = cap.get(cv2.CAP_PROP_FOCUS)
+            autoexposure = cap.get(cv2.CAP_PROP_AUTO_EXPOSURE)
+            exposure = cap.get(cv2.CAP_PROP_EXPOSURE)
+            iso_speed = cap.get(cv2.CAP_PROP_ISO_SPEED)
+
+            # 情報を表示
+            print(f"解像度: {width}x{height}")
+            print(f"フレームレート: {fps}")
+            print(f"オートフォーカス: {autofocus}")
+            print(f"フォーカス値: {focus}")
+            print(f"オート露出: {autoexposure}")
+            print(f"露出値: {exposure}")
+            print(f"ISO感度: {iso_speed}")
+            cv2.waitKey(0)
+            cap.release()
+            
+             # デバイスをリストに追加
+            devices.append({
+                "index": i,
+                "width": width,
+                "height": height,
+                "fps": fps,
+                # ... (その他のプロパティ)
+            })
+        else:
+            pass
+        
+    cv2.destroyAllWindows()
+    
+    # スリープ処理を追加してデバイス解放を待つ
+    time.sleep(1)  # 1秒間待つ
+    
+    # デバイスのリストを表示
+    print("\n利用可能なデバイス:")
+    for i, device in enumerate(devices):
+        print(f"{i+1}. デバイス {device['index']}: 解像度 {device['width']}x{device['height']}, フレームレート {device['fps']}")
+
+    # ユーザーにデバイスを選択させる
+    choice = int(input("使用するデバイスを選択してください: ")) - 1
+
+    if 0 <= choice < len(devices):
+        # 選択されたデバイスのインデックスを取得
+        selected_index = devices[choice]["index"]
+    cap = cv2.VideoCapture(selected_index)
+    
+    while(True):
+        ret, frame = cap.read()
+
+        if ret == True:
+            # フレームを表示
+            cv2.imshow('Camera Feed', frame)
+
+        # 'q'キーが押されたらループを終了
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+
+    cap.release()
+    cv2.destroyAllWindows()
+    
+if __name__ == '__main__':
+    main()
