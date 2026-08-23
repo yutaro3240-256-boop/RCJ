@@ -44,6 +44,7 @@ class forLib {
     void begin();
     void LEDstate(int pin, int state);
     void ToFSelect(uint8_t _pin);
+    void turn(uint8_t _position,uint8_t _speed,uint8_t t);
     void stop();
     double Photoformula();
 

@@ -57,6 +57,19 @@ void forLib::ToFSelect(uint8_t _pin){
   return;
 }
 
+void forLib::turn(uint8_t _position, uint8_t _speed, uint8_t t){
+  hlscl.ServoMode(1); //ID1のサーボモータをサーボモードに設定する
+  hlscl.ServoMode(2); //ID2のサーボモータをサーボモードに設定する
+  s16 Position[2];
+  u16 _Speed[2]={_speed,_speed};
+  Position[0] = hlscl.ReadPos(1)+_position;
+  Position[1] = hlscl.ReadPos(2)-_position;
+  hlscl.SyncWritePosEx(ID, 2, Position, _Speed, ACC, Torque);
+  delay(t);
+  hlscl.WheelMode(1);  //サーボID1を定速モードに切り替える
+  hlscl.WheelMode(2);  //サーボID2を定速モードに切り替える
+}
+
 void forLib::stop(){
   s16 _Speed[2]={0,0};
   hlscl.SyncWriteSpe(ID, 2, _Speed, ACC, Torque);

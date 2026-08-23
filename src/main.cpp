@@ -35,12 +35,13 @@ void loop() {
   Speed[0] = p + velocity;
   Speed[1] = p - velocity;
   hlscl.SyncWriteSpe(ID, 2, Speed, ACC, Torque);
-  
+
   if(MyToF.dataReady()==true){
     l=MyToF.read(false);
-    if(l<250){
+    if(l<80){
       myrobot.stop();
       delay(100);
+      
     }
   }
   
