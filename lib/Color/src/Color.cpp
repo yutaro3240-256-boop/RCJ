@@ -358,7 +358,7 @@ void Color::get_averageall(int count,RGB _rgb[]){
 }
 
 bool Color::getcompare(RGB _rgb,u_int8_t _ID,bool _read){
-    return this->compare(_rgb.r,_rgb.b,_rgb.g,_ID,_read);
+    return this->compare(_rgb.r,_rgb.g,_rgb.b,_ID,_read);
 }
 
 uint8_t Color::sensorCount(){
@@ -430,5 +430,5 @@ bool Color::finishall(){
 }
 
 bool Color::compared(uint8_t _compared,uint8_t _compare,uint8_t _range){
-    return _compared>=_compare-_range&&_compared<=_compare-_range;
+    return _compared>=_compare+_range&&_compared<=_compare-_range;
 }

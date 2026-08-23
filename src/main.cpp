@@ -9,7 +9,6 @@
 #define velocity 40
 #define ToFadd 2
 
-
 forLib myrobot;
 
 void setup() {
@@ -30,14 +29,17 @@ void setup() {
 }*/
 
 void loop() {
+
   uint16_t l=0;
   double p = myrobot.Photoformula()*0.5;
+
   Speed[0] = p + velocity;
   Speed[1] = p - velocity;
   hlscl.SyncWriteSpe(ID, 2, Speed, ACC, Torque);
 
   if(MyToF.dataReady()==true){
     l=MyToF.read(false);
+    
     if(l<80){
       myrobot.stop();
       delay(100);
