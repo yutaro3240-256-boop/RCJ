@@ -5,6 +5,8 @@
 #include <Adafruit_NeoPixel.h>
 #include <VL53L1X.h>
 #include <HLSCL.h>
+#include <SparkFun_BNO08x_Arduino_Library.h>
+
 
 #define G_BOOT PC6 
 #define G_RST  PC7 
@@ -15,6 +17,7 @@
 #define TG  50 
 #define PhotoLED PB12 
 #define Lo 0
+#define TCAADDR 0x70
 
 static constexpr int Photo[21] = { PF12, PF11, PB1, PB0, PC5, PC4, PA7, PA6, PA5, PA4, PA3, PA2, PA1, PA0, PC1, PC0, PF10, PF9, PF8, PF7, PE9 };//フォトリフレクタ
 static constexpr float Photogain[20] = { 10, 9, 0.8, 0.7, 0.6, 0.5, 0.4,0.3,0.2, 0.1, -0.1, -0.2, -0.3, -0.4, -0.5, -0.6, -0.7, -0.7, -9, -10 };
@@ -33,14 +36,14 @@ extern HardwareSerial motor;
 extern HardwareSerial MySerial2;
 extern TwoWire ToF_Wire;
 extern TwoWire Wire3;
-
+extern BNO08x myIMU;
 
 
 class forLib {
   public:
     void begin();
     void LEDstate(int pin, int state);
-
+    void ToFSelect(uint8_t _pin);
     double Photoformula();
 
   private:

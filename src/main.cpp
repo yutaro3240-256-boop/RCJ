@@ -6,13 +6,13 @@
 #include <VL53L1X.h>
 
 #define BNO08X_ADDR 0x4B
+#define velocity 40
 
 const float gain[20] = { 0, 0, 0, 0, 0, 0, 0, 0, 3, 2, -2, -3, 0, 0, 0, 0, 0, 0, 0, 0 };
 //
-//BNO08x myIMU;
+//
 //
 forLib myrobot;
-float D=0;
 
 void setup() {
   myrobot.begin();
@@ -33,8 +33,8 @@ void setup() {
 
 void loop() {
   double p = myrobot.Photoformula()*0.5;
-  Speed[0] = 40 + p;
-  Speed[1] = -40 + p;
+  Speed[0] = p + velocity;
+  Speed[1] = p - velocity;
   hlscl.SyncWriteSpe(ID, 2, Speed, ACC, Torque);
 
   
