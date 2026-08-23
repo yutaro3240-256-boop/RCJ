@@ -30,7 +30,6 @@ void setup() {
 
 void loop() {
 
-  uint16_t l=0;
   double p = myrobot.Photoformula()*0.5;
 
   Speed[0] = p + velocity;
@@ -38,6 +37,7 @@ void loop() {
   hlscl.SyncWriteSpe(ID, 2, Speed, ACC, Torque);
 
   if(MyToF.dataReady()==true){
+    uint16_t l=0;
     l=MyToF.read(false);
     
     if(l<80){
@@ -46,9 +46,9 @@ void loop() {
       
     }
   }
-  
-  if(analogRead(Photo[0])>500||analogRead(Photo[1])>500){
 
+  if(analogRead(Photo[0])>500||analogRead(Photo[1])>500||analogRead(Photo[18])>500||analogRead(Photo[19])>500){
+    myrobot.stop();
   }
   
   /*if (myIMU.wasReset()) {
