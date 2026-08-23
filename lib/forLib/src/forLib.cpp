@@ -1,11 +1,27 @@
 #include "forLib.h"
 
 Color S9706;
+Adafruit_NeoPixel pixels(4,PB13,NEO_GRB + NEO_KHZ800);
+VL53L1X MyToF;
+HLSCL hlscl;
+HardwareSerial motor(PE0, PE1);
+HardwareSerial MySerial2(PG0, PG1);
+TwoWire ToF_Wire(MULTI_SDA, MULTI_SCA);
+TwoWire Wire3(PC10,PC11);
 
 void forLib::begin(){
   uint32_t COLOR_pin[2][4] = { { PD8, PD9, PD10, PD11 }, { PA9, PA10, PA11, PA12 } };  //[カラセンの番号],[PIN]
   S9706.begin(COLOR_pin[0][GATE_PIN], COLOR_pin[0][CK_PIN], COLOR_pin[0][RANGE_PIN], COLOR_pin[0][DOUT_PIN]);
   S9706.begin(COLOR_pin[1][GATE_PIN], COLOR_pin[1][CK_PIN], COLOR_pin[1][RANGE_PIN], COLOR_pin[1][DOUT_PIN]);
+  motor.begin(1000000);  //mega2560
+  MySerial2.begin(9600);
+  hlscl.pSerial = &motor;
+  ToF_Wire.begin();
+  Wire3.begin();
+  
+  hlscl.WheelMode(1);  //サーボID1を定速モードに切り替える
+  hlscl.WheelMode(2);  //サーボID2を定速モードに切り替える
+
   for (int i = 0; i < 21; i++) {  //フォトリフレクタ設定
     pinMode(Photo[i], INPUT);
   }
@@ -21,9 +37,9 @@ void forLib::LEDstate(int pin, int state){
     digitalWrite(LED[pin], state);
 }
 
-int forLib::Photoformula(){
+double forLib::Photoformula(){
   int sum = 0;
-  for (int i = 0; i < 20; i++) {
+  for (int i = 2; i <= 17; i++) {
     sum += analogRead(Photo[i]) * Photogain[i];
   }
   return sum;
