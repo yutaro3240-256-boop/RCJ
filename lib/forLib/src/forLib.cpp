@@ -57,6 +57,11 @@ void forLib::ToFSelect(uint8_t _pin){
   return;
 }
 
+void forLib::stop(){
+  s16 _Speed[2]={0,0};
+  hlscl.SyncWriteSpe(ID, 2, _Speed, ACC, Torque);
+}
+
 double forLib::Photoformula(){
   int sum = 0;
   for (int i = 2; i <= 17; i++) {

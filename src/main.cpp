@@ -7,11 +7,9 @@
 
 #define BNO08X_ADDR 0x4B
 #define velocity 40
+#define ToFadd 2
 
-const float gain[20] = { 0, 0, 0, 0, 0, 0, 0, 0, 3, 2, -2, -3, 0, 0, 0, 0, 0, 0, 0, 0 };
-//
-//
-//
+
 forLib myrobot;
 
 void setup() {
@@ -22,7 +20,7 @@ void setup() {
   }
   myIMU.enableRotationVector(50);
   delay(1000);*/
-
+  myrobot.ToFSelect(ToFadd);
 }
 
 /*void setReports(void) {
@@ -32,11 +30,23 @@ void setup() {
 }*/
 
 void loop() {
+  uint16_t l=0;
   double p = myrobot.Photoformula()*0.5;
   Speed[0] = p + velocity;
   Speed[1] = p - velocity;
   hlscl.SyncWriteSpe(ID, 2, Speed, ACC, Torque);
+  
+  if(MyToF.dataReady()==true){
+    l=MyToF.read(false);
+    if(l<250){
+      myrobot.stop();
+      delay(100);
+    }
+  }
+  
+  if(analogRead(Photo[0])>500||analogRead(Photo[1])>500){
 
+  }
   
   /*if (myIMU.wasReset()) {
     setReports();
