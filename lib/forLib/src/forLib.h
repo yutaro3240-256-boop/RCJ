@@ -23,10 +23,10 @@ static constexpr int Photo[21] = { PF12, PF11, PB1, PB0, PC5, PC4, PA7, PA6, PA5
 static constexpr float Photogain[20] = { 10, 9, 0.8, 0.7, 0.6, 0.5, 0.4,0.3,0.2, 0.1, -0.1, -0.2, -0.3, -0.4, -0.5, -0.6, -0.7, -0.7, -9, -10 };
 static constexpr int LED[4] = { PD12, PD13, PD14, PD15 };
 
-byte ID[2] = { 1, 2 };
-s16 Speed[2];
-byte ACC[2] = { 0, 0 };
-u16 Torque[2] = { 500, 500 };
+extern byte ID[2];
+extern s16 Speed[2];
+extern byte ACC[2];
+extern u16 Torque[2];
 
 extern Color S9706;
 extern Adafruit_NeoPixel pixels;

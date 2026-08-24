@@ -9,6 +9,10 @@ HardwareSerial MySerial2(PG0, PG1);
 TwoWire ToF_Wire(MULTI_SDA, MULTI_SCA);
 TwoWire Wire3(PC10,PC11);
 BNO08x myIMU;
+byte ID[2] = { 1, 2 };
+s16 Speed[2];
+byte ACC[2] = { 0, 0 };
+u16 Torque[2] = { 500, 500 };
 
 void forLib::begin(){
 
@@ -18,14 +22,14 @@ void forLib::begin(){
   motor.begin(1000000);  //mega2560
   MySerial2.begin(9600);
   hlscl.pSerial = &motor;
-  ToF_Wire.begin(PB7, PB8);
+  ToF_Wire.begin();
   ToF_Wire.setClock(400000);
   Wire3.begin();
   
   hlscl.WheelMode(1);  //サーボID1を定速モードに切り替える
   hlscl.WheelMode(2);  //サーボID2を定速モードに切り替える
 
-  MyToF.setBus(&Wire3);
+  MyToF.setBus(&ToF_Wire);
   for (uint8_t t = 0; t < 8; t++) { //ToF設定
     this->ToFSelect(t);
     MyToF.init();
@@ -58,7 +62,7 @@ void forLib::ToFSelect(uint8_t _pin){
 }
 
 void forLib::turn(uint8_t _position, uint8_t _speed, uint8_t t){
-  hlscl.ServoMode(1); //ID1のサーボモータをサーボモードに設定する
+  /*hlscl.ServoMode(1); //ID1のサーボモータをサーボモードに設定する
   hlscl.ServoMode(2); //ID2のサーボモータをサーボモードに設定する
   s16 Position[2];
   u16 _Speed[2]={_speed,_speed};
@@ -67,7 +71,7 @@ void forLib::turn(uint8_t _position, uint8_t _speed, uint8_t t){
   hlscl.SyncWritePosEx(ID, 2, Position, _Speed, ACC, Torque);
   delay(t);
   hlscl.WheelMode(1);  //サーボID1を定速モードに切り替える
-  hlscl.WheelMode(2);  //サーボID2を定速モードに切り替える
+  hlscl.WheelMode(2);  //サーボID2を定速モードに切り替える*/
 }
 
 void forLib::stop(){
@@ -76,9 +80,10 @@ void forLib::stop(){
 }
 
 double forLib::Photoformula(){
-  int sum = 0;
+  double sum = 0;
   for (int i = 2; i <= 17; i++) {
-    sum += analogRead(Photo[i]) * Photogain[i];
+    double p= analogRead(Photo[i]) * Photogain[i];
+    sum += p;
   }
   return sum;
 }

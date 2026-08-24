@@ -20,6 +20,7 @@ void setup() {
   myIMU.enableRotationVector(50);
   delay(1000);*/
   myrobot.ToFSelect(ToFadd);
+  myrobot.LEDstate(0,HIGH);
 }
 
 /*void setReports(void) {
@@ -30,26 +31,27 @@ void setup() {
 
 void loop() {
 
-  double p = myrobot.Photoformula()*0.5;
+  double p = myrobot.Photoformula()*1;
 
-  Speed[0] = p + velocity;
-  Speed[1] = p - velocity;
+  Speed[0] = p + 40;
+  Speed[1] = p - 60;
   hlscl.SyncWriteSpe(ID, 2, Speed, ACC, Torque);
 
-  if(MyToF.dataReady()==true){
-    uint16_t l=0;
-    l=MyToF.read(false);
+    //uint16_t l=0;
+    //l=MyToF.read();
     
-    if(l<80){
-      myrobot.stop();
+    /*if(l<800){
+      //myrobot.stop();
+      myrobot.LEDstate(1,HIGH);
       delay(100);
-      
-    }
-  }
+    }else{
+      myrobot.LEDstate(1,LOW);
+      delay(100);
+    }*/
 
-  if(analogRead(Photo[0])>500||analogRead(Photo[1])>500||analogRead(Photo[18])>500||analogRead(Photo[19])>500){
-    myrobot.stop();
-  }
+  //if(analogRead(Photo[0])>500||analogRead(Photo[1])>500||analogRead(Photo[18])>500||analogRead(Photo[19])>500){
+    //myrobot.stop();
+  //}
   
   /*if (myIMU.wasReset()) {
     setReports();
