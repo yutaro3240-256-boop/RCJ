@@ -5,55 +5,63 @@
 #include <Wire.h>
 #include <VL53L1X.h>
 
-#define BNO08X_ADDR 0x4B
+
 #define velocity 40
 #define ToFadd 2
 
 forLib myrobot;
 
+void setReports();
+
 void setup() {
   myrobot.begin();
-  //Wire.setClock(400000);
-  /*if (myIMU.begin(BNO08X_ADDR, Wire, PC8, PC7) == false) {
-    digitalWrite(LED[3],HIGH);
-  }
-  myIMU.enableRotationVector(50);
-  delay(1000);*/
+  hlscl.SyncWriteSpe(ID, 2, Speed, ACC, Torque);
+  delay(1000);
   myrobot.ToFSelect(ToFadd);
-  myrobot.LEDstate(0,HIGH);
+  //myrobot.LEDstate(0,HIGH);
+  digitalWrite(PhotoLED, LOW);
+  setReports();
 }
 
-/*void setReports(void) {
+void setReports(void) {
   if (myIMU.enableRotationVector() == true) {
-    digitalWrite(LED[2], HIGH);
+    digitalWrite(LED[0], HIGH);
   }
-}*/
+
+  delay(100);
+  digitalWrite(LED[0], LOW);
+}
 
 void loop() {
 
-  double p = myrobot.Photoformula()*1;
+  /*double p = myrobot.Photoformula()*0.01;
+  s16 TempS[2];
+  TempS[0] = s16(p + 40);
+  TempS[1] = s16(p - 40);
+  hlscl.SyncWriteSpe(ID, 2, TempS, ACC, Torque);*/
 
-  Speed[0] = p + 40;
-  Speed[1] = p - 60;
-  hlscl.SyncWriteSpe(ID, 2, Speed, ACC, Torque);
-
-    //uint16_t l=0;
-    //l=MyToF.read();
-    
-    /*if(l<800){
-      //myrobot.stop();
+  /*uint16_t l=0;
+  if(MyToF.dataReady()==true){
+    l=MyToF.read(false);
+    if(l<100){
+      s16 _Speed[2]={60,-50};
+      hlscl.SyncWriteSpe(ID, 2, _Speed, ACC, Torque);
       myrobot.LEDstate(1,HIGH);
-      delay(100);
     }else{
+      s16 _Speed[2]={5,-50};
+      hlscl.SyncWriteSpe(ID, 2, _Speed, ACC, Torque);
       myrobot.LEDstate(1,LOW);
-      delay(100);
-    }*/
+    }
+  }*/
+  //myrobot.turn(30,2500);
+  //delay(1000);
+  
 
   //if(analogRead(Photo[0])>500||analogRead(Photo[1])>500||analogRead(Photo[18])>500||analogRead(Photo[19])>500){
     //myrobot.stop();
   //}
   
-  /*if (myIMU.wasReset()) {
+  if (myIMU.wasReset()) {
     setReports();
   }
 
@@ -66,21 +74,11 @@ void loop() {
       float roll = (myIMU.getRoll()) * 180.0 / PI;    // Convert roll to degrees
       float pitch = (myIMU.getPitch()) * 180.0 / PI;  // Convert pitch to degrees
       float yaw = (myIMU.getYaw()) * 180.0 / PI;      // Convert yaw / heading to degrees
-      if (roll >= 180) {
+      if (yaw >= 100) {
         digitalWrite(LED[1], HIGH);
+      }else{
+        digitalWrite(LED[1], LOW);
       }
     }
-  }*/
-}
-/*int readColor(int colorselect) {
-  int result = 0;
-  for (int i = 0; i < 12; i++) {
-    digitalWrite(Color[colorselect][CK], HIGH);
-    delayMicroseconds(1);
-    result |= (digitalRead(Color[colorselect][DOUT]) << i);
-    digitalWrite(Color[colorselect][CK], LOW);
-    delayMicroseconds(1);
   }
-  delayMicroseconds(3);
-  return result;
-}*/
+}

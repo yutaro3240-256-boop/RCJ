@@ -7,10 +7,10 @@ HLSCL hlscl;
 HardwareSerial motor(PE0, PE1);
 HardwareSerial MySerial2(PG0, PG1);
 TwoWire ToF_Wire(MULTI_SDA, MULTI_SCA);
-TwoWire Wire3(PC10,PC11);
+TwoWire IMU_Wire(PC10,PC11);
 BNO08x myIMU;
 byte ID[2] = { 1, 2 };
-s16 Speed[2];
+s16 Speed[2]={0,0};
 byte ACC[2] = { 0, 0 };
 u16 Torque[2] = { 500, 500 };
 
@@ -24,7 +24,8 @@ void forLib::begin(){
   hlscl.pSerial = &motor;
   ToF_Wire.begin();
   ToF_Wire.setClock(400000);
-  Wire3.begin();
+  IMU_Wire.begin();
+  IMU_Wire.setClock(100000);
   
   hlscl.WheelMode(1);  //サーボID1を定速モードに切り替える
   hlscl.WheelMode(2);  //サーボID2を定速モードに切り替える
@@ -37,16 +38,24 @@ void forLib::begin(){
     MyToF.setMeasurementTimingBudget(50000);
     MyToF.startContinuous(50);
   }
+  pinMode(G_BOOT, OUTPUT);//ジャイロ設定
+  digitalWrite(G_BOOT,HIGH);
+  if (myIMU.begin(BNO08X_ADDR, IMU_Wire, G_INIT, G_RST) == false) {
+    this->LEDstate(1,HIGH);
+  }
+  myIMU.enableRotationVector(50);
+  delay(1000);
 
   for (int i = 0; i < 21; i++) {  //フォトリフレクタ設定
-    pinMode(Photo[i], INPUT);
+    pinMode(Photo[i], INPUT_ANALOG);
   }
   for (int i = 0; i < 4; i++) {  //LED設定
     pinMode(LED[i], OUTPUT);
   }
-  pinMode(G_BOOT, OUTPUT);//ジャイロ設定
+
   pinMode(PhotoLED, OUTPUT);//フォトリフレクタLED設定
   digitalWrite(PhotoLED, HIGH);
+
 }
 
 void forLib::LEDstate(int pin, int state){
@@ -61,17 +70,11 @@ void forLib::ToFSelect(uint8_t _pin){
   return;
 }
 
-void forLib::turn(uint8_t _position, uint8_t _speed, uint8_t t){
-  /*hlscl.ServoMode(1); //ID1のサーボモータをサーボモードに設定する
-  hlscl.ServoMode(2); //ID2のサーボモータをサーボモードに設定する
-  s16 Position[2];
-  u16 _Speed[2]={_speed,_speed};
-  Position[0] = hlscl.ReadPos(1)+_position;
-  Position[1] = hlscl.ReadPos(2)-_position;
-  hlscl.SyncWritePosEx(ID, 2, Position, _Speed, ACC, Torque);
+void forLib::turn(s16 _speed, long t){
+  s16 _Speed[2]={_speed,_speed};
+  hlscl.SyncWriteSpe(ID, 2, _Speed, ACC, Torque);
   delay(t);
-  hlscl.WheelMode(1);  //サーボID1を定速モードに切り替える
-  hlscl.WheelMode(2);  //サーボID2を定速モードに切り替える*/
+  this->stop();
 }
 
 void forLib::stop(){
