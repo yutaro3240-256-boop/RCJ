@@ -24,7 +24,7 @@ bool Color::begin(uint8_t _gate,uint8_t _ck,uint8_t _range,uint8_t _dout){  //ã‚
 
 bool Color::erase(int _ID){
     
-    if(_ID>ID){
+    if (_ID < 0 || _ID >= ID) {
         return false;
     }
 
@@ -183,7 +183,7 @@ bool Color::read_average(int count,int _ID){
     if(state!=State::IDLE){
         return false;
     }
-    if(count==0){
+    if(count<=0){
         return false;
     }
     if(_ID >= ID){
@@ -226,7 +226,7 @@ void Color::read_averageall(int count){
     if(state!=State::IDLE){
         return;
     }
-    if(count==0){
+    if(count<=0){
         return;
     }
 
@@ -295,14 +295,14 @@ bool Color::out_ratio(int &_R_,int &_G_,int &_B_,int _ID, bool _read){
 }
 
 bool Color::compare_ratio(int _R_,int _G_,int _B_,int _ID,bool _read){
-    if(_ID > ID){
+    if(_ID >= ID){
         return false;
     }
     int r_R,r_G,r_B;
 
     this->out_ratio(r_R,r_G,r_B,_ID,_read);
     
-    if(this->compared(r_R,_R_,_comparerange_ratio)&&this->compared(r_B,_B_,_comparerange_ratio)&&this->compared(r_B,_B_,_comparerange_ratio)){
+    if(this->compared(r_R,_R_,_comparerange_ratio)&&this->compared(r_G,_G_,_comparerange_ratio)&&this->compared(r_B,_B_,_comparerange_ratio)){
         return true;
     }else{
         return false;
@@ -357,7 +357,7 @@ void Color::get_averageall(int count,RGB _rgb[]){
     }
 }
 
-bool Color::getcompare(RGB _rgb,u_int8_t _ID,bool _read){
+bool Color::getcompare(RGB _rgb,uint8_t _ID,bool _read){
     return this->compare(_rgb.r,_rgb.g,_rgb.b,_ID,_read);
 }
 
@@ -429,6 +429,6 @@ bool Color::finishall(){
     return true;
 }
 
-bool Color::compared(uint8_t _compared,uint8_t _compare,uint8_t _range){
-    return _compared*-1>=_compare-_range&&_compared<=_compare-_range;
+bool Color::compared(uint16_t _compared,uint16_t _compare,uint16_t _range){
+    return _compared>=_compare-_range&&_compared<=_compare+_range;
 }

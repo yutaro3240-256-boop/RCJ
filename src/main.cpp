@@ -43,8 +43,11 @@ void loop() {
   RGB rgb={0,0,0};
   rgb=S9706.get(0,true);
   MySerial2.print(rgb.r);
+  MySerial2.print(":");
   MySerial2.print(rgb.g);
+  MySerial2.print(":");
   MySerial2.print(rgb.b);
+  MySerial2.println(":");
   /*if(S9706.compare_ratio(25,50,25,0,true)){
     myrobot.LEDstate(forLib::B,forLib::ON);
   }else{

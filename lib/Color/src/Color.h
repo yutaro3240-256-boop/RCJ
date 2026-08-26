@@ -71,12 +71,12 @@ typedef enum {
       bool compare_ratio(int _R_,int _G_,int _B_,int _ID=0,bool _read=false);
       void setcompareRange_ratio(uint8_t _range_);
 
-      RGB get(u_int8_t _ID=0, bool _read=false);
-      RGB get_average(int count,u_int8_t _ID=0);
+      RGB get(uint8_t _ID=0, bool _read=false);
+      RGB get_average(int count,uint8_t _ID=0);
       void getall(RGB _rgb[],bool _read=false);
       void get_averageall(int count,RGB _rgb[]);
 
-      bool getcompare(RGB _rgb,u_int8_t _ID=0,bool _read=false);
+      bool getcompare(RGB _rgb,uint8_t _ID=0,bool _read=false);
       
 
       uint8_t sensorCount();
@@ -95,7 +95,7 @@ typedef enum {
       
       uint16_t readADC(int _ID);
       
-      bool compared(uint8_t _compared,uint8_t _compare,uint8_t _range);
+      bool compared(uint16_t _compared,uint16_t _compare,uint16_t _range);
 
       uint16_t _TG=50;
       uint8_t _comparerange=20;
