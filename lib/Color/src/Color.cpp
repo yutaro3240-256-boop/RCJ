@@ -430,5 +430,5 @@ bool Color::finishall(){
 }
 
 bool Color::compared(uint8_t _compared,uint8_t _compare,uint8_t _range){
-    return _compared>=_compare+_range&&_compared<=_compare-_range;
+    return _compared*-1>=_compare-_range&&_compared<=_compare-_range;
 }
