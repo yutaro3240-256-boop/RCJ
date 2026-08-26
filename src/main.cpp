@@ -34,7 +34,7 @@ void setReports(void) {
 }
 
 void loop() {
-  //test
+  //test 00
   pixels.clear();
   for(int k=0; k<=3; k++){
       pixels.setPixelColor(k, pixels.Color(255, 255, 255));
