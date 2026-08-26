@@ -4,7 +4,7 @@
 #include <HLSCL.h>
 #include <Wire.h>
 #include <VL53L1X.h>
-
+#include <Adafruit_NeoPixel.h>
 
 #define velocity 40
 #define ToFadd 2
@@ -19,8 +19,9 @@ void setup() {
   delay(1000);
   myrobot.ToFSelect(ToFadd);
   //myrobot.LEDstate(0,HIGH);
-  digitalWrite(PhotoLED, LOW);
+  digitalWrite(PhotoLED, HIGH);
   setReports();
+  S9706.setcompareRange_ratio(100);
 }
 
 void setReports(void) {
@@ -33,6 +34,28 @@ void setReports(void) {
 }
 
 void loop() {
+  pixels.clear();
+  for(int k=0; k<=3; k++){
+      pixels.setPixelColor(k, pixels.Color(255, 255, 255));
+    }
+  pixels.show();
+  delay(50);
+  RGB rgb={0,0,0};
+  rgb=S9706.get(0,true);
+  MySerial2.print(rgb.r);
+  MySerial2.print(rgb.g);
+  MySerial2.print(rgb.b);
+  /*if(S9706.compare_ratio(25,50,25,0,true)){
+    myrobot.LEDstate(forLib::B,forLib::ON);
+  }else{
+    myrobot.LEDstate(forLib::B,forLib::OFF);
+  }
+  if(analogRead(Photo[0])>630){
+    myrobot.LEDstate(forLib::A,forLib::ON);
+  }else{
+    myrobot.LEDstate(forLib::A,forLib::OFF);
+  }*/
+
 
   /*double p = myrobot.Photoformula()*0.01;
   s16 TempS[2];
@@ -61,7 +84,7 @@ void loop() {
     //myrobot.stop();
   //}
   
-  if (myIMU.wasReset()) {
+  /*if (myIMU.wasReset()) {
     setReports();
   }
 
@@ -80,5 +103,5 @@ void loop() {
         digitalWrite(LED[1], LOW);
       }
     }
-  }
+  }*/
 }

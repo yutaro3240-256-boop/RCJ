@@ -42,13 +42,23 @@ extern BNO08x myIMU;
 
 class forLib {
   public:
+    enum _LED{
+      A=GPIO_PIN_12,
+      B=GPIO_PIN_13,
+      C=GPIO_PIN_14,
+      D=GPIO_PIN_15
+    };
+    enum _STATE{
+      ON=0,
+      OFF=16
+    };
     void begin();
-    void LEDstate(int pin, int state);
+    void LEDstate(forLib::_LED pin, _STATE state);
     void ToFSelect(uint8_t _pin);
     void turn(s16 _speed,long t);
     void stop();
     double Photoformula();
-
+    
   private:
   
 };

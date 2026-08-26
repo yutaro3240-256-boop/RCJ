@@ -295,7 +295,7 @@ bool Color::out_ratio(int &_R_,int &_G_,int &_B_,int _ID, bool _read){
 }
 
 bool Color::compare_ratio(int _R_,int _G_,int _B_,int _ID,bool _read){
-    if(_ID >= ID){
+    if(_ID > ID){
         return false;
     }
     int r_R,r_G,r_B;

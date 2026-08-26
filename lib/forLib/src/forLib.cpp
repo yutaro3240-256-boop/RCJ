@@ -41,10 +41,12 @@ void forLib::begin(){
   pinMode(G_BOOT, OUTPUT);//ジャイロ設定
   digitalWrite(G_BOOT,HIGH);
   if (myIMU.begin(BNO08X_ADDR, IMU_Wire, G_INIT, G_RST) == false) {
-    this->LEDstate(1,HIGH);
+    this->LEDstate(A,forLib::ON);
   }
   myIMU.enableRotationVector(50);
   delay(1000);
+
+  pixels.begin();
 
   for (int i = 0; i < 21; i++) {  //フォトリフレクタ設定
     pinMode(Photo[i], INPUT_ANALOG);
@@ -58,8 +60,8 @@ void forLib::begin(){
 
 }
 
-void forLib::LEDstate(int pin, int state){
-  digitalWrite(LED[pin], state);
+void forLib::LEDstate(forLib::_LED pin, forLib::_STATE state){
+  GPIOD->BSRR=pin<<state;
 }
 
 void forLib::ToFSelect(uint8_t _pin){
