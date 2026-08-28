@@ -22,6 +22,12 @@ void setup() {
   digitalWrite(PhotoLED, HIGH);
   setReports();
   S9706.setcompareRange_ratio(100);
+  pixels.clear();
+  for(int k=0; k<=3; k++){
+      pixels.setPixelColor(k, pixels.Color(255, 255, 5));
+    }
+  pixels.show();
+  delay(100);
 }
 
 void setReports(void) {
@@ -31,41 +37,35 @@ void setReports(void) {
 
   delay(100);
   digitalWrite(LED[0], LOW);
+  
 }
 
 void loop() {
-  //test 00
-  pixels.clear();
-  for(int k=0; k<=3; k++){
-      pixels.setPixelColor(k, pixels.Color(255, 255, 255));
-    }
-  pixels.show();
-  delay(50);
-  RGB rgb={0,0,0};
-  rgb=S9706.get(0,true);
-  MySerial2.print(rgb.r);
-  MySerial2.print(":");
-  MySerial2.print(rgb.g);
-  MySerial2.print(":");
-  MySerial2.print(rgb.b);
-  MySerial2.println(":");
-  /*if(S9706.compare_ratio(25,50,25,0,true)){
+  /*int _R_,_G_,_B_;
+  S9706.out_ratio(_R_,_G_,_B_,0,true);
+  if(S9706.compare_ratio(25,50,25,0,false)){
     myrobot.LEDstate(forLib::B,forLib::ON);
   }else{
     myrobot.LEDstate(forLib::B,forLib::OFF);
   }
-  if(analogRead(Photo[0])>630){
-    myrobot.LEDstate(forLib::A,forLib::ON);
+  if(S9706.compare_ratio(25,50,25,0,true)){
+    myrobot.LEDstate(forLib::B,forLib::ON);
   }else{
-    myrobot.LEDstate(forLib::A,forLib::OFF);
+    myrobot.LEDstate(forLib::B,forLib::OFF);
   }*/
 
 
-  /*double p = myrobot.Photoformula()*0.01;
+  double p = myrobot.Photoformula()*0.5;
   s16 TempS[2];
   TempS[0] = s16(p + 40);
   TempS[1] = s16(p - 40);
-  hlscl.SyncWriteSpe(ID, 2, TempS, ACC, Torque);*/
+  /*MySerial2.print(p);
+  MySerial2.print(":");
+  MySerial2.print(TempS[0]);
+  MySerial2.print(":");
+  MySerial2.println(TempS[1]);
+  delay(500);*/
+  hlscl.SyncWriteSpe(ID, 2, TempS, ACC, Torque);
 
   /*uint16_t l=0;
   if(MyToF.dataReady()==true){

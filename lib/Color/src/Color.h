@@ -78,7 +78,6 @@ typedef enum {
 
       bool getcompare(RGB _rgb,uint8_t _ID=0,bool _read=false);
       
-
       uint8_t sensorCount();
 
       uint16_t getBrightness(int _ID=0,bool _read=false);

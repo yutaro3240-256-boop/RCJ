@@ -15,8 +15,8 @@ byte ACC[2] = { 0, 0 };
 u16 Torque[2] = { 500, 500 };
 
 void forLib::begin(){
-
-  uint32_t COLOR_pin[2][4] = { { PD8, PD9, PD10, PD11 }, { PA9, PA10, PA11, PA12 } };  //[カラセンの番号],[PIN]
+  
+  uint32_t COLOR_pin[2][4] = { { PD8, PD9, PD10, PD11 }, { PG9, PG11, PG10, PD7 } };  //[カラセンの番号],[PIN]
   S9706.begin(COLOR_pin[0][GATE_PIN], COLOR_pin[0][CK_PIN], COLOR_pin[0][RANGE_PIN], COLOR_pin[0][DOUT_PIN]);
   S9706.begin(COLOR_pin[1][GATE_PIN], COLOR_pin[1][CK_PIN], COLOR_pin[1][RANGE_PIN], COLOR_pin[1][DOUT_PIN]);
   motor.begin(1000000);  //mega2560
@@ -73,10 +73,10 @@ void forLib::ToFSelect(uint8_t _pin){
 }
 
 void forLib::turn(s16 _speed, long t){
-  s16 _Speed[2]={_speed,_speed};
+  /*s16 _Speed[2]={_speed,_speed};
   hlscl.SyncWriteSpe(ID, 2, _Speed, ACC, Torque);
   delay(t);
-  this->stop();
+  this->stop();*/
 }
 
 void forLib::stop(){
