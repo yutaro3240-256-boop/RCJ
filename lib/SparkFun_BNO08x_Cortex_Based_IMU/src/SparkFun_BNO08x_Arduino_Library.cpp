@@ -87,7 +87,7 @@ size_t maxBufferSize();
 
 //Initializes the sensor with basic settings using I2C
 //Returns false if sensor is not detected
-boolean BNO08x::begin(uint8_t deviceAddress, TwoWire &wirePort, int8_t user_INTPin, int8_t user_RSTPin)
+bool BNO08x::begin(uint8_t deviceAddress, TwoWire &wirePort, int8_t user_INTPin, int8_t user_RSTPin)
 {
   	_deviceAddress = deviceAddress;
   	_i2cPort = &wirePort;
@@ -125,7 +125,7 @@ boolean BNO08x::begin(uint8_t deviceAddress, TwoWire &wirePort, int8_t user_INTP
 
 //Initializes the sensor with basic settings using SPI
 //Returns false if sensor is not detected
-boolean BNO08x::beginSPI(uint8_t user_CSPin, uint8_t user_INTPin, uint8_t user_RSTPin, uint32_t spiPortSpeed, SPIClass &spiPort)
+bool BNO08x::beginSPI(uint8_t user_CSPin, uint8_t user_INTPin, uint8_t user_RSTPin, uint32_t spiPortSpeed, SPIClass &spiPort)
 {
 	//Get user settings
 	_spiPort = &spiPort;
@@ -1384,7 +1384,7 @@ uint8_t BNO08x::getSensorEventID()
 
 
 //Returns true if I2C device ack's
-boolean BNO08x::isConnected()
+bool BNO08x::isConnected()
 {
   	_i2cPort->beginTransmission((uint8_t)_deviceAddress);
   	if (_i2cPort->endTransmission() != 0)
@@ -1449,7 +1449,7 @@ bool i2c_write(const uint8_t *buffer, size_t len, bool stop,
  *    @param  stop Whether to send an I2C STOP signal on read
  *    @return True if read was successful, otherwise false.
  */
-boolean i2c_read(uint8_t *buffer, size_t len, bool stop) {
+bool i2c_read(uint8_t *buffer, size_t len, bool stop) {
   size_t pos = 0;
   while (pos < len) {
     size_t read_len =
@@ -1462,7 +1462,7 @@ boolean i2c_read(uint8_t *buffer, size_t len, bool stop) {
   return true;
 }
 
-boolean _i2c_read(uint8_t *buffer, size_t len, bool stop) {
+bool _i2c_read(uint8_t *buffer, size_t len, bool stop) {
 #if defined(TinyWireM_h)
   size_t recv = _i2cPort->requestFrom((uint8_t)_deviceAddress, (uint8_t)len);
 #elif defined(ARDUINO_ARCH_MEGAAVR)
