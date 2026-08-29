@@ -43,22 +43,11 @@ void setReports(void) {
 }
 
 void loop() {
-  /*S9706.update();
+  S9706.update();
   if(S9706.available()){
     S9706.finishall();
-    for(int i=0; i<2; i++){
-      RGB rgb=S9706.get(i);
-      MySerial2.print(i);
-      MySerial2.print("::");
-      MySerial2.print(rgb.r);
-      MySerial2.print(":");
-      MySerial2.print(rgb.g);
-      MySerial2.print(":");
-      MySerial2.print(rgb.b);
-      MySerial2.println("======");
-    }
     S9706.startall();
-  }*/
+  }
 
   double p = myrobot.Photoformula();
   double d = p-D_zure;
@@ -188,6 +177,7 @@ void loop() {
     l=MyToF.read(false);
     if(l<100){
       myrobot.stop();
+      myrobot.turn(30,2500);
       myrobot.ToFSelect(ToFleft);
       while(analogRead(Photo[10])<650){
 
@@ -203,11 +193,14 @@ void loop() {
           hlscl.SyncWriteSpe(ID, 2, _Speed, ACC, Torque);
           myrobot.LEDstate(forLib::A,forLib::OFF);
         }
+      
       }
+      
+      myrobot.turn(30,2500);
     }
     
   }
-  //myrobot.turn(30,2500);
+  
   //delay(1000);
   
   /*if (myIMU.wasReset()) {
