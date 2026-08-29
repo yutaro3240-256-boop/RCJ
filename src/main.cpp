@@ -7,7 +7,8 @@
 #include <Adafruit_NeoPixel.h>
 
 #define velocity 40
-#define ToFadd 2
+#define ToFfront 2
+#define ToFleft 2
 
 forLib myrobot;
 
@@ -17,7 +18,7 @@ void setup() {
   myrobot.begin();
   hlscl.SyncWriteSpe(ID, 2, Speed, ACC, Torque);
   delay(1000);
-  myrobot.ToFSelect(ToFadd);
+  myrobot.ToFSelect(ToFfront);
   //myrobot.LEDstate(0,HIGH);
   digitalWrite(PhotoLED, HIGH);
   setReports();
@@ -162,7 +163,6 @@ void loop() {
         Speed[0]=-50;
         Speed[1]=-80;
         hlscl.SyncWriteSpe(ID, 2, Speed, ACC, Torque);
-        delay(1000);
         while(analogRead(Photo[9])<600);
         myrobot.stop();
 
@@ -183,26 +183,32 @@ void loop() {
     myrobot.LEDstate(forLib::A,forLib::OFF);
   }
 
-  /*uint16_t l=0;
   if(MyToF.dataReady()==true){
+    uint16_t l=0;
     l=MyToF.read(false);
     if(l<100){
-      s16 _Speed[2]={60,-50};
-      hlscl.SyncWriteSpe(ID, 2, _Speed, ACC, Torque);
-      myrobot.LEDstate(1,HIGH);
-    }else{
-      s16 _Speed[2]={5,-50};
-      hlscl.SyncWriteSpe(ID, 2, _Speed, ACC, Torque);
-      myrobot.LEDstate(1,LOW);
+      myrobot.stop();
+      myrobot.ToFSelect(ToFleft);
+      while(analogRead(Photo[10])<650){
+
+        while (MyToF.dataReady()==true);
+        l=MyToF.read(false);
+
+        if(l<100){
+          s16 _Speed[2]={60,-50};
+          hlscl.SyncWriteSpe(ID, 2, _Speed, ACC, Torque);
+          myrobot.LEDstate(forLib::A,forLib::ON);
+        }else{
+          s16 _Speed[2]={5,-50};
+          hlscl.SyncWriteSpe(ID, 2, _Speed, ACC, Torque);
+          myrobot.LEDstate(forLib::A,forLib::OFF);
+        }
+      }
     }
-  }*/
+    
+  }
   //myrobot.turn(30,2500);
   //delay(1000);
-  
-
-  //if(analogRead(Photo[0])>500||analogRead(Photo[1])>500||analogRead(Photo[18])>500||analogRead(Photo[19])>500){
-    //myrobot.stop();
-  //}
   
   /*if (myIMU.wasReset()) {
     setReports();
