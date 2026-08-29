@@ -12,7 +12,7 @@
 forLib myrobot;
 
 void setReports();
-
+double D_zure=0;
 void setup() {
   myrobot.begin();
   hlscl.SyncWriteSpe(ID, 2, Speed, ACC, Torque);
@@ -28,6 +28,7 @@ void setup() {
     }
   pixels.show();
   delay(100);
+  
 }
 
 void setReports(void) {
@@ -41,31 +42,146 @@ void setReports(void) {
 }
 
 void loop() {
-  /*int _R_,_G_,_B_;
-  S9706.out_ratio(_R_,_G_,_B_,0,true);
-  if(S9706.compare_ratio(25,50,25,0,false)){
-    myrobot.LEDstate(forLib::B,forLib::ON);
-  }else{
-    myrobot.LEDstate(forLib::B,forLib::OFF);
-  }
-  if(S9706.compare_ratio(25,50,25,0,true)){
-    myrobot.LEDstate(forLib::B,forLib::ON);
-  }else{
-    myrobot.LEDstate(forLib::B,forLib::OFF);
+  /*S9706.update();
+  if(S9706.available()){
+    S9706.finishall();
+    for(int i=0; i<2; i++){
+      RGB rgb=S9706.get(i);
+      MySerial2.print(i);
+      MySerial2.print("::");
+      MySerial2.print(rgb.r);
+      MySerial2.print(":");
+      MySerial2.print(rgb.g);
+      MySerial2.print(":");
+      MySerial2.print(rgb.b);
+      MySerial2.println("======");
+    }
+    S9706.startall();
   }*/
 
-
-  double p = myrobot.Photoformula()*0.5;
+  double p = myrobot.Photoformula();
+  double d = p-D_zure;
   s16 TempS[2];
-  TempS[0] = s16(p + 40);
-  TempS[1] = s16(p - 40);
-  /*MySerial2.print(p);
-  MySerial2.print(":");
-  MySerial2.print(TempS[0]);
-  MySerial2.print(":");
-  MySerial2.println(TempS[1]);
-  delay(500);*/
+  double err = p*0.3+d*1;            
+  TempS[0] = s16(err + velocity);
+  TempS[1] = s16(err - velocity);
   hlscl.SyncWriteSpe(ID, 2, TempS, ACC, Torque);
+  D_zure = p;
+
+  if(analogRead(Photo[0])>700||analogRead(Photo[1])>700||analogRead(Photo[18])>700||analogRead(Photo[19])>700){
+    myrobot.stop();
+
+    int black=0;
+    if(analogRead(Photo[0])>700||analogRead(Photo[1])>700){
+      black+=1;
+    }
+    if(analogRead(Photo[18])>700||analogRead(Photo[19])>700){
+      black+=2;
+    }
+    delay(100);
+    Speed[0]=-40;
+    Speed[1]=40;
+    hlscl.SyncWriteSpe(ID, 2, Speed, ACC, Torque);
+    delay(250);
+    myrobot.stop();
+    delay(500);
+    int check=0;
+    for(int i=0; i<2; i++){
+      RGB rgb=S9706.get(i,true);
+      if(rgb.r<4000&&rgb.g>3900){
+        check+=i+1;
+      }
+    }
+    MySerial2.println(check);
+    for(int i=0; i<check; i++){
+      myrobot.LEDstate(forLib::D,forLib::ON);
+      delay(100);
+      myrobot.LEDstate(forLib::D,forLib::OFF);
+      delay(100);
+    }
+    for(int i=0; i<black; i++){
+      myrobot.LEDstate(forLib::B,forLib::ON);
+      delay(100);
+      myrobot.LEDstate(forLib::B,forLib::OFF);
+      delay(100);
+    }
+    myrobot.LEDstate(forLib::A,forLib::ON);
+    switch (check)
+    {
+    case 1:
+      Speed[0]=40;
+      Speed[1]=-40;
+      hlscl.SyncWriteSpe(ID, 2, Speed, ACC, Torque);
+      delay(500);
+      Speed[0]=80;
+      Speed[1]=50;
+      hlscl.SyncWriteSpe(ID, 2, Speed, ACC, Torque);
+      delay(1000);
+      while(analogRead(Photo[10])<600);
+      myrobot.stop();
+      break;
+    case 2:
+      Speed[0]=40;
+      Speed[1]=-40;
+      hlscl.SyncWriteSpe(ID, 2, Speed, ACC, Torque);
+      delay(500);
+      Speed[0]=-50;
+      Speed[1]=-80;
+      hlscl.SyncWriteSpe(ID, 2, Speed, ACC, Torque);
+      delay(1000);
+      while(analogRead(Photo[9])<600);
+      myrobot.stop();
+      break;
+    case 3:
+      
+      break;
+    default:
+      switch (black)
+      {
+        case 1:
+        Speed[0]=40;
+        Speed[1]=-40;
+        hlscl.SyncWriteSpe(ID, 2, Speed, ACC, Torque);
+        delay(700);
+        myrobot.stop();
+        Speed[0]=80;
+        Speed[1]=50;
+        delay(500);
+        
+        hlscl.SyncWriteSpe(ID, 2, Speed, ACC, Torque);
+        while(analogRead(Photo[10])<650);
+        
+        myrobot.stop();
+        break;
+      case 2:
+        Speed[0]=40;
+        Speed[1]=-40;
+        hlscl.SyncWriteSpe(ID, 2, Speed, ACC, Torque);
+        delay(600);
+
+        Speed[0]=-50;
+        Speed[1]=-80;
+        hlscl.SyncWriteSpe(ID, 2, Speed, ACC, Torque);
+        delay(1000);
+        while(analogRead(Photo[9])<600);
+        myrobot.stop();
+
+        break;
+      case 3:
+        Speed[0]=40;
+        Speed[1]=-40;
+        hlscl.SyncWriteSpe(ID, 2, Speed, ACC, Torque);
+        delay(600);
+        myrobot.stop();
+        break;
+
+      default:
+        break;
+      }
+      break;
+    }
+    myrobot.LEDstate(forLib::A,forLib::OFF);
+  }
 
   /*uint16_t l=0;
   if(MyToF.dataReady()==true){

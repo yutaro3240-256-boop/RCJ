@@ -21,7 +21,7 @@
 #define BNO08X_ADDR 0x4A
 
 static constexpr int Photo[21] = { PF12, PF11, PB1, PB0, PC5, PC4, PA7, PA6, PA5, PA4, PA3, PA2, PA1, PA0, PC1, PC0, PF10, PF9, PF8, PF7, PE9 };//フォトリフレクタ
-static constexpr double Photogain[20] = { 0, 0, 0.8, 0.7, 0.6, 0.5, 0.4 ,0.3 ,0.2 , 0.1, -0.1, -0.2, -0.3, -0.4, -0.5, -0.6, -0.7, -0.8, 0, 0 };
+static constexpr double Photogain[20] = { 0, 0, 0.8, 0.7, 0.6, 0.5, 0.4 ,0.3 ,0.2 , 0.1, -0.1, -0.2, -0.3, -0.4, -0.5, -0.6, -0.67, -0.75, 0, 0 };
 static constexpr int LED[4] = { PD12, PD13, PD14, PD15 };
 
 extern byte ID[2];
