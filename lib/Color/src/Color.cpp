@@ -103,6 +103,7 @@ void Color::set(int _ID){
 
     // 感度設定
     digitalWrite(sensors[_ID].range, HIGH);
+    delayMicroseconds(3);
 
     // 光量の積算を開始
     digitalWrite(sensors[_ID].gate, HIGH);
@@ -129,7 +130,9 @@ void Color::setall(){
     for(int i=0; i<ID; i++){
         // 感度設定
         digitalWrite(sensors[i].range, HIGH);
-
+    }
+    delayMicroseconds(3);
+    for(int i=0; i<ID; i++){
         // 光量の積算を開始
         digitalWrite(sensors[i].gate, HIGH);
     }
@@ -379,7 +382,9 @@ bool Color::startall(){
     for(int i=0; i<ID; i++){
         // 感度設定
         digitalWrite(sensors[i].range, HIGH);
-
+    }
+    delayMicroseconds(3);
+    for(int i=0; i<ID; i++){    
         // 光量の積算を開始
         digitalWrite(sensors[i].gate, HIGH);
     }

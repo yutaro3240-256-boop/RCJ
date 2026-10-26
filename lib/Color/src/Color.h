@@ -12,15 +12,6 @@ enum class State{
     COMPLETE
 };
 
-enum class Color_name{
-   RED,
-   BLUE,
-   GREEN,
-   YELLOW,
-   WHITE,
-   BLACK
-};
-
 struct Sensor {
     uint8_t gate;
     uint8_t ck;

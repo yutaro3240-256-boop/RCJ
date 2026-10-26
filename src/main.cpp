@@ -23,6 +23,7 @@ void setup() {
   digitalWrite(PhotoLED, HIGH);
   setReports();
   S9706.setcompareRange_ratio(100);
+  S9706.startall();
   pixels.clear();
   for(int k=0; k<=3; k++){
       pixels.setPixelColor(k, pixels.Color(255, 255, 5));
@@ -43,11 +44,17 @@ void setReports(void) {
 }
 
 void loop() {
-  S9706.update();
+  /*S9706.update();
   if(S9706.available()){
     S9706.finishall();
+    RGB rgb =S9706.get(0);
+    MySerial2.print(rgb.r);
+    MySerial2.print(":");
+    MySerial2.print(rgb.g);
+    MySerial2.print(":");
+    MySerial2.println(rgb.b);
     S9706.startall();
-  }
+  }*/
 
   double p = myrobot.Photoformula();
   double d = p-D_zure;
@@ -58,14 +65,14 @@ void loop() {
   hlscl.SyncWriteSpe(ID, 2, TempS, ACC, Torque);
   D_zure = p;
 
-  if(analogRead(Photo[0])>700||analogRead(Photo[1])>700||analogRead(Photo[18])>700||analogRead(Photo[19])>700){
+  if(analogRead(Photo[0])>600||analogRead(Photo[1])>600||analogRead(Photo[18])>600||analogRead(Photo[19])>600){
     myrobot.stop();
 
     int black=0;
-    if(analogRead(Photo[0])>700||analogRead(Photo[1])>700){
+    if(analogRead(Photo[0])>600||analogRead(Photo[1])>600){
       black+=1;
     }
-    if(analogRead(Photo[18])>700||analogRead(Photo[19])>700){
+    if(analogRead(Photo[18])>600||analogRead(Photo[19])>600){
       black+=2;
     }
     delay(100);
@@ -78,7 +85,7 @@ void loop() {
     int check=0;
     for(int i=0; i<2; i++){
       RGB rgb=S9706.get(i,true);
-      if(rgb.r<4000&&rgb.g>3900){
+      if(rgb.g>2000){
         check+=i+1;
       }
     }
@@ -123,7 +130,7 @@ void loop() {
       myrobot.stop();
       break;
     case 3:
-      
+      myrobot.turn(30,5000);
       break;
     default:
       switch (black)
@@ -175,7 +182,8 @@ void loop() {
   if(MyToF.dataReady()==true){
     uint16_t l=0;
     l=MyToF.read(false);
-    if(l<100){
+    myrobot.LEDstate(forLib::B,forLib::ON);
+    if(l<100&&l!=0){
       myrobot.stop();
       myrobot.turn(30,2500);
       myrobot.ToFSelect(ToFleft);
@@ -198,7 +206,7 @@ void loop() {
       
       myrobot.turn(30,2500);
     }
-    
+    myrobot.LEDstate(forLib::B,forLib::OFF);
   }
   
   //delay(1000);
