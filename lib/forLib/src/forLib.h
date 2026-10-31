@@ -1,12 +1,11 @@
-#ifndef forLib_H  // 二重読み込み防止（インクルードガード）
-#define forLib_H
-#include <Color.h>
+#ifndef FORLIB_SRC_FORLIB_H  // 二重読み込み防止（インクルードガード）
+#define FORLIB_SRC_FORLIB_H
 #include <Arduino.h>
 #include <Adafruit_NeoPixel.h>
 #include <VL53L1X.h>
 #include <HLSCL.h>
 #include <SparkFun_BNO08x_Arduino_Library.h>
-
+#include <Color.h>
 
 #define G_BOOT PC6 
 #define G_RST  PC7 

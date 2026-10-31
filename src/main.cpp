@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include <forlib.h>
+#include <forLib.h>
 #include <Color.h>
 #include <HLSCL.h>
 #include <Wire.h>
